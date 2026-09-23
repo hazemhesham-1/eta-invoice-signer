@@ -1,0 +1,102 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource/noto-sans";
+@import "@fontsource/cairo";
+@import "@fontsource/cairo/500.css";
+@import "@fontsource/noto-sans/700.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --radius: 0.625rem;
+    --background: #FFF;
+    --foreground: #0A0A0A;
+    --card: #FFF;
+    --card-foreground: #0A0A0A;
+    --popover: #FFF;
+    --popover-foreground: #0A0A0A;
+    --primary: #18459E;
+    --primary-foreground: #FAFAFA;
+    --secondary: #E3E8F3;
+    --secondary-foreground: #143A86;
+    --muted: #F5F5F5;
+    --muted-foreground: #737373;
+    --accent: #466AB1;
+    --accent-hover: #748FC4;
+    --accent-foreground: #F5F5F5;
+    --destructive: #E7000B;
+
+    --border: #E5E5E5;
+    --input: #E5E5E5;
+    --ring: #A1A1A1;
+}
+
+.dark {
+    --background: #0A0A0A;
+    --foreground: #FAFAFA;
+    --card: #18459E;
+    --card-foreground: #FAFAFA;
+    --popover: #18459E;
+    --popover-foreground: #FAFAFA;
+    --primary: #E5E5E5;
+    --primary-foreground: #18459E;
+    --secondary: #262626;
+    --secondary-foreground: #FAFAFA;
+    --muted: #262626;
+    --muted-foreground: #A1A1A1;
+    --accent: #262626;
+    --accent-foreground: #FAFAFA;
+    --destructive: #EF4444;
+
+    --border: #FFFFFF1A;
+    --input: #FFFFFF26;
+    --ring: #737373;
+}
+
+@theme inline {
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+
+    --font-noto: "Noto Sans", sans-serif;
+    --font-arabic: "Cairo", sans-serif;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        background: var(--color-background);
+        color: var(--color-foreground);
+        font-family: var(--font-noto);
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["*"]
+        },
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "strict": true,
+        "ignoreDeprecations": "6.0",
+        "rootDir": "./src",
+        "outDir": "dist"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}
