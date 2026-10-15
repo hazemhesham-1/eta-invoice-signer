@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { CheckCircle2Icon, RefreshCwIcon, ReplaceIcon, ShieldCheckIcon, UsbIcon } from "lucide-react";
 import { Badge } from "./ui/Badge";
 import { Button } from "./ui/Button";
@@ -13,7 +14,7 @@ const CertificateCard = ({ certificate, onSelectCertificate }) => {
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     async function fetchCertificates() {
-        const response = await window.electronAPI.listCertificates();
+        const response = await invoke("get_certificates");
 
         if(response.success) {
             const decodedData = atob(response.data);
@@ -37,7 +38,7 @@ const CertificateCard = ({ certificate, onSelectCertificate }) => {
         setIsRefreshing(true);
 
         try {
-            const status = await window.electronAPI.checkTokenStatus();
+            const status = await invoke("get_usb_token");
             setIsTokenConnected(status.success);
 
             if(status.success) {

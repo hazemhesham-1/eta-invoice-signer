@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { FileSignatureIcon, RefreshCwIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "./ui/Badge";
@@ -10,113 +11,12 @@ import InvoiceTable from "./InvoiceTable";
 import SigningProgress from "./SigningProgress";
 import UserProfileHeader from "./UserProfileHeader";
 
-const sampleData = [
-    {
-        rawData: {
-        "issuer": {
-        "address": {
-        "branchID": "0",
-        "country": "EG",
-        "governate": "Cairo",
-        "regionCity": "El Nozha",
-        "street": "و مربع 1226 عمارات شركه مصر الجديده خلف شيراتون النزهه",
-        "buildingNumber": "5",
-        "postalCode": null,
-        "floor": null,
-        "room": null,
-        "landmark": null,
-        "additionalInformation": " "
-        },
-        "type": "B",
-        "id": "753317052",
-        "name": "ايتوس لتقنيات المياه والتشغيل والصيانه"
-        },
-        "receiver": {
-        "address": {
-        "country": "EG",
-        "governate": "Cairo",
-        "regionCity": "New Cairo 1",
-        "street": "و35و36 ش التسعين التجمع الخامس القاهره الجديده",
-        "buildingNumber": "34",
-        "postalCode": "4730110",
-        "floor": null,
-        "room": null,
-        "landmark": null,
-        "additionalInformation": " "
-        },
-        "type": "B",
-        "id": "204962420",
-        "name": "الشركه المصريه للغازات الطبيعيه جاسكو الشركه المصريه للغازات الطبيعيه جاسكو"
-        },
-        "documentType": "i",
-        "documentTypeVersion": "1.0",
-        "dateTimeIssued": "2026-08-16T09:48:31Z",
-        "taxpayerActivityCode": "3600",
-        "internalID": "1707",
-        "payment": {},
-        "delivery": {},
-        "invoiceLines": [
-        {
-        "description": "زيارة إشراف علي التشغيل\n",
-        "itemType": "EGS",
-        "itemCode": "EG-753317052-1",
-        "unitType": "EA",
-        "quantity": 1,
-        "internalCode": "",
-        "salesTotal": 10000,
-        "total": 11100,
-        "valueDifference": 0,
-        "totalTaxableFees": 0,
-        "netTotal": 10000,
-        "itemsDiscount": 0,
-        "unitValue": {
-        "currencySold": "EGP",
-        "amountEGP": 10000,
-        "amountSold": 0
-        },
-        "discount": {},
-        "taxableItems": [
-        {
-        "taxType": "T1",
-        "amount": 1400,
-        "subType": "V009",
-        "rate": 14
-        },
-        {
-        "taxType": "T4",
-        "amount": 300,
-        "subType": "W004",
-        "rate": 3
-        }
-        ]
-        }
-        ],
-        "totalDiscountAmount": 0,
-        "totalSalesAmount": 10000,
-        "netAmount": 10000,
-        "taxTotals": [
-        {
-        "taxType": "T1",
-        "amount": 1400
-        },
-        {
-        "taxType": "T4",
-        "amount": 300
-        }
-        ],
-        "totalAmount": 11100,
-        "extraDiscountAmount": 0,
-        "totalItemsDiscountAmount": 0,
-        "references": []
-        }
-    }
-]
-
 const DashboardView = () => {
     const { token } = useAuth();
     const [invoices, setInvoices] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const [selected, setSelected] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [selectedCert, setSelectedCert] = useState(null);
     const [currentInvoice, setCurrentInvoice] = useState(null);
@@ -142,7 +42,11 @@ const DashboardView = () => {
         }
 
         const allowedStatus = ["READY_TO_SIGN", "FAILED"];
-        setSelected(invoices.filter((invoice) => allowedStatus.includes(invoice.status)).map((invoice) => invoice._id));
+        setSelected(invoices.filter((invoice) => allowedStatus.includes(invoice.status)).map((invoice) => invoice.id));
+    }
+
+    function updateInvoiceStatus(id, status) {
+        setInvoices((current) => current.map((invoice) => (invoice.id === id ? { ...invoice, status } : invoice)));
     }
 
     async function handleSignInvoices() {
@@ -150,15 +54,60 @@ const DashboardView = () => {
 
         setIsSigning(true);
 
+        const signedInvoiceIds = [];
+
         for(const invoiceId of selected) {
-            const signingInvoice = invoices.find((invoice) => invoice._id === invoiceId);
-            setCurrentInvoice(signingInvoice);
-            setInvoices((current) => current.map((invoice) => (invoice._id === invoiceId ? { ...invoice, status: "SIGNING" } : invoice)));
+            const foundInvoice = invoices.find((invoice) => invoice.id === invoiceId);
+            if(!foundInvoice || foundInvoice.status === "SIGNED") {
+                continue;
+            }
 
-            const result = await window.electronAPI.signInvoices({ documents: [JSON.stringify(signingInvoice)], certificateId: selectedCert.id });
-            console.log(result);
+            setCurrentInvoice(foundInvoice);
 
-            setInvoices((current) => current.map((invoice) => (invoice._id === invoiceId ? { ...invoice, status: result.success ? "SIGNED" : "FAILED" } : invoice)));
+            try {
+                updateInvoiceStatus(invoiceId, "SIGNING");
+
+                const { id, status, signatures, ...invoiceDocument } = foundInvoice;
+                const data = {
+                    documents: [JSON.stringify(invoiceDocument)],
+                    certificateId: selectedCert.id
+                };
+                
+                const result = await invoke("sign_invoices", { data });
+                console.log(result);
+
+                let statusUpdate = result.success ? "SIGNED" : "FAILED";
+
+                if(result.success) {
+                    const signature = {
+                        type: "I",
+                        value: result.data
+                    };
+
+                    const saveResult = await invoke("save_invoice_signature", { token, invoiceId, signatureData: [signature] });
+                    if(!saveResult.success) {
+                        statusUpdate = "FAILED";
+                    }
+                    else {
+                        signedInvoiceIds.push(invoiceId);
+                    }
+                }
+                else {
+                    alert(/\s/.test(result.error) ? result.error : atob(result.error));
+                }
+
+                updateInvoiceStatus(invoiceId, statusUpdate);
+            }
+            catch(err) {
+                updateInvoiceStatus(invoiceId, "FAILED");
+                console.error(`Failed to sign invoice (${invoiceId}): `, err);
+            }
+        }
+
+        // const submitResult = await invoke("submit_invoices", { token, invoiceIds: signedInvoiceIds });
+        if(submitResult.success) {
+            const unsignedInvoices = invoices.filter((invoice) => !signedInvoiceIds.includes(invoice.id));
+            setInvoices(unsignedInvoices);
         }
 
         setCurrentInvoice(null);
@@ -167,11 +116,12 @@ const DashboardView = () => {
     }
 
     async function loadInvoices() {
-        try {
-            setIsLoading(true);
-            const result = await window.electronAPI.listInvoices(token);
+        setIsLoading(true);
 
-            const invoicesData = result.data.map((invoice) => ({ ...invoice, status: "READY_TO_SIGN" }));
+        try {
+            const result = await invoke("get_draft_invoices", { token });
+
+            const invoicesData = result.preparedInvoices.map((invoice) => ({ ...invoice, status: "READY_TO_SIGN" }));
             setInvoices(invoicesData);
         }
         catch(error) {
@@ -261,7 +211,7 @@ const DashboardView = () => {
                 {isSigning && (
                     <SigningProgress
                         invoices={invoices}
-                        currentInvoice={currentInvoice?._id}
+                        currentInvoice={currentInvoice?.id}
                         signedCount={signedCount}
                     />
                 )}

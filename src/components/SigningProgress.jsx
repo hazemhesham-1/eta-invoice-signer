@@ -29,11 +29,11 @@ const SigningProgress = ({ currentInvoice, invoices, signedCount }) => {
                 <Progress value={progress}/>
                 <div className="border rounded-lg divide-y">
                     {invoices.map((invoice) => {
-                        const isCurrent = invoice._id === currentInvoice;
+                        const isCurrent = invoice.id === currentInvoice;
 
                         return (
                             <div
-                                key={invoice._id}
+                                key={invoice.id}
                                 className="flex items-center justify-between px-4 py-3"
                             >
                                 <div className="flex items-center gap-3">

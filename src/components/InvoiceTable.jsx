@@ -39,13 +39,13 @@ const InvoiceTable = ({ invoices, selected, allSelected, onToggleAll, onToggleIn
             <TableBody>
                 {invoices.map((invoice) => (
                     <TableRow
-                        key={invoice._id}
-                        className={selected.includes(invoice._id) ? "bg-primary/10" : undefined}
+                        key={invoice.id}
+                        className={selected.includes(invoice.id) ? "bg-primary/10" : undefined}
                     >
                         <TableCell>
                             <Checkbox
-                                checked={selected.includes(invoice._id)}
-                                onCheckedChange={() => onToggleInvoice(invoice._id)}
+                                checked={selected.includes(invoice.id)}
+                                onCheckedChange={() => onToggleInvoice(invoice.id)}
                                 disabled={invoice.status !== "READY_TO_SIGN" && invoice.status !== "FAILED"}
                             />
                         </TableCell>
@@ -71,16 +71,16 @@ const InvoiceTable = ({ invoices, selected, allSelected, onToggleAll, onToggleIn
                             </div>
                         </TableCell>
                         <TableCell className="text-xs text-start">
-                            {invoice.items[0]?.description}
+                            {invoice.invoiceLines[0]?.description}
                         </TableCell>
                         <TableCell className="text-start font-medium">
                             {invoice.totalAmount.toLocaleString("en-EG")}{" "}
                             <span className="text-muted-foreground text-xs">
-                                {invoice.items[0]?.unitValue.currency}
+                                {invoice.invoiceLines[0]?.unitValue.currencySold}
                             </span>
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                            {new Date(invoice.issueDate).toLocaleDateString()}
+                            {new Date(invoice.dateTimeIssued).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
                             <InvoiceStatusBadge status={invoice.status}/>

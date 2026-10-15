@@ -22,7 +22,7 @@ const Header = () => {
             </div>
             <div className="flex flex-col">
                 <h1 className="text-foreground text-xl font-bold">
-                    <span className="text-primary">IW<span className="text-[#E32A26]">O</span>MT</span> - ETA Invoices Signer
+                    <span className="text-primary">IW<span className="text-[#E32A26]">O</span>MT</span> - ETA Invoice Signer
                 </h1>
                 <p className="text-muted-foreground text-xs">
                     Egyptian Tax Authority E-Signature Tool

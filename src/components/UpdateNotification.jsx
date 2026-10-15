@@ -1,58 +1,99 @@
 import { useEffect, useState } from "react";
+import { check } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
+import { XIcon } from "lucide-react";
 import { Button } from "./ui/Button";
 import { Progress } from "./ui/Progress";
 
 const UpdateNotification = () => {
-    const [update, setUpdate] = useState(null);
-    const [progress, setProgress] = useState(0);
+    const [updateInfo, setUpdateInfo] = useState({ status: "idle" });
 
     useEffect(() => {
-        window.electronAPI?.onUpdateAvailable((data) => {
-            setUpdate({ status: "downloading", version: data.version });
-        });
+        async function handleUpdaterStatus() {
+            setUpdateInfo({ status: "checking" });
 
-        window.electronAPI?.onUpdateProgress((data) => {
-            setProgress(data.percent);
-        });
+            try {
+                const update = await check();
+                if(!update) {
+                    setUpdateInfo({ status: "idle" });
+                    return;
+                }
 
-        window.electronAPI?.onUpdateDownloaded((data) => {
-            setUpdate({ status: "ready", version: data.version });
-        });
+                setUpdateInfo({ status: "available", downloaded: 0, total: null, version: update.version, notes: update.body });
 
-        window.electronAPI?.onUpdateError((data) => {
-            console.error("Update error: ", data.message);
-        });
+                await update.downloadAndInstall((event) => {
+                    if(event.event === "Started") {
+                        setUpdateInfo((prev) => ({ ...prev, total: event.data.contentLength ?? null }));
+                    }
+                    if(event.event === "Progress") {
+                        setUpdateInfo((prev) => ({ ...prev, downloaded: prev.downloaded + event.data.chunkLength }));
+                    }
+                    if(event.event === "Finished") {
+                        setUpdateInfo((prev) => ({ ...prev, status: "ready" }));
+                    }
+                });
+            }
+            catch(err) {
+                setUpdateInfo({ status: "error", message: err.message ?? err });
+            }
+        }
+
+        handleUpdaterStatus();
     }, []);
 
-    if(!update) return null;
+    const progress = !isNaN(updateInfo.total) ? Math.min(100, (updateInfo.downloaded / updateInfo.total) * 100) : 0;
+
+    const showUpdater = ["ready", "available", "checking", "error"].includes(updateInfo.status);
+    if(!showUpdater) return null;
 
     return (
-        <div className="bg-background border rounded-lg fixed bottom-4 right-4 w-80 p-4 shadow-lg z-50">
-            {update.status === "ready" ? (
+        <div
+            className="bg-background border rounded-lg fixed bottom-10 left-4 w-80 p-4 text-sm text-start ring ring-primary/20 shadow-lg z-50"
+            dir="rtl"
+        >
+            {updateInfo.status === "ready" ? (
                 <>
                     <p className="font-medium">
                         يوجد تحديث جديد
                     </p>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        الإصدار {update.version} جاهز للتثبيت.
+                        الإصدار {updateInfo.version} جاهز للتثبيت.
                     </p>
-                    <Button onClick={() => window.electronAPI.installUpdate()}>
+                    <Button onClick={() => relaunch()}>
                         إعادة تشغيل وتحديث
                     </Button>
                 </>
-            ) : update.status === "downloading" ? (
+            ) : updateInfo.status === "available" ? (
                 <>
                     <p className="font-medium">
                         جاري تحديث التطبيق
                     </p>
                     <p className="text-muted-foreground mt-1 text-sm">
-                        الإصدار {update.version}
+                        الإصدار {updateInfo.version}
                     </p>
                     <Progress value={progress}/>
                     <p className="text-muted-foreground mt-2 text-xs">
-                        {Math.round(progress)}%
+                        {progress}%
                     </p>
                 </>
+            ) : updateInfo.status === "checking" ? (
+                <p className="font-medium">
+                    جاري التحقق من وجود تحديثات...
+                </p>
+            ) : updateInfo.status === "error" ? (
+                <div>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-500 absolute top-0 left-0"
+                        onClick={() => setUpdateInfo({ status: "idle" })}
+                    >
+                        <XIcon/>
+                    </Button>
+                    <p className="font-medium">
+                        {updateInfo.message}
+                    </p>
+                </div>
             ) : null}
         </div>
     );

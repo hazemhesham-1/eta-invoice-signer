@@ -2,7 +2,7 @@ import UpdateNotification from "./UpdateNotification";
 
 const Footer = () => {
     return (
-        <footer className="w-full px-6 py-5 mt-auto">
+        <footer className="w-full space-y-2 px-6 py-5 mt-auto">
             <UpdateNotification/>
             <div className="text-muted-foreground flex flex-col items-center justify-between gap-4 max-w-7xl mx-auto text-sm sm:flex-row">
                 <p className="m-0">

@@ -1,0 +1,46 @@
+{
+    "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+    "productName": "IWOMT ETA Invoice Signer",
+    "version": "1.0.0",
+    "identifier": "com.iwomt.eta-invoice-signer",
+    "build": {
+        "frontendDist": "../dist",
+        "devUrl": "http://localhost:5173",
+        "beforeDevCommand": "npm run start",
+        "beforeBuildCommand": "npm run build"
+    },
+    "app": {
+        "windows": [
+            {
+                "title": "IWOMT ETA Invoice Signer",
+                "width": 800,
+                "height": 600,
+                "resizable": true,
+                "fullscreen": false
+            }
+        ],
+        "security": {
+            "csp": null
+        }
+    },
+    "bundle": {
+        "active": true,
+        "targets": ["nsis"],
+        "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+        "createUpdaterArtifacts": true,
+        "publisher": "IETOS",
+        "shortDescription": "IWOMT Electronic Invoice Signing and Submission Tool for ETA by Eng. Hazem Hesham",
+        "longDescription": "A desktop application designed for the Egyptian Tax Authority (ETA) e-invoicing ecosystem. Developed by Eng. Hazem Hesham for IWOMT, This tool helps companies stay compliant by allowing them to securely sign invoices using USB tokens or HSM hardware, verify document structures locally, and submit data directly to the official ETA portal.",
+        "android": {
+            "debugApplicationIdSuffix": ".debug"
+        }
+    },
+    "plugins": {
+        "updater": {
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEUzOUNGRDI1MDYzMEI0NjcKUldSbnREQUdKZjJjNDVOa3dSZ1VnZHdqM0x6NEwyVHovK09RRnFjUURVbzJMSEJVTjZSTWY2Q3MK",
+            "endpoints": [
+                "https://updates.iwomt.net/eta-invoice-signer/updates/latest.json"
+            ]
+        }
+    }
+}

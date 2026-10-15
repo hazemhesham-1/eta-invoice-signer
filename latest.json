@@ -1,0 +1,11 @@
+{
+    "version": "1.0.0",
+    "notes": "Welcome to the first official release of the ETA Electronic Invoice Signing and Submission Tool, developed by Eng. Hazem Hesham for IWOMT.",
+    "pub_date": "2026-09-29T12:00:00Z",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNDF3RnYxa3I1NFhFZU5lVDNJWmVyQVN3eFZWTlFBem9TUUhncW9Ed3ZQdUlhblpiTitkMSsvK2pZMGlFaWZjTDdXOHN0WFg1aEE1VVhYVnhFWmNZSndFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNjg3NTgyCWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4wX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMApmZmZuS1IvbmhtTGdBM2l6bFJUUkxKS2huT1BwUUV2SnhjcGNYS3NXUWE0MW9mQUdCdnFEenppdHVCbEEyRjNZNG1GbHZ3a1AvUitIcWxlSnpaaTNEdz09Cg==",
+            "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.0/IWOMT ETA Invoice Signer_1.0.0_x64-setup.exe"
+        }
+    }
+}

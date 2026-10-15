@@ -14,5 +14,11 @@ export default defineConfig({
         alias: {
             "@": path.resolve(import.meta.dirname, "./src"),
         }
+    },
+    server: {
+        clearScreen: false,
+        watch: {
+            ignored: ["**/src-tauri/**", "**/node_modules/**"]
+        }
     }
 });

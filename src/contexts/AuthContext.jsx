@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 
 const AuthContext = createContext(null);
 
@@ -8,15 +10,17 @@ function AuthProvider({ children }) {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        async function initializeUserSession(receivedToken) {
+        async function initializeUserSession(event) {
+            const receivedToken = event.payload;
+
             try {
                 setToken(receivedToken);
-                
+
                 const response = await fetch("https://api.iwomt.net/api/user/me", {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${receivedToken}`
-                    },
+                    }
                 });
 
                 const userData = await response.json();
@@ -37,10 +41,10 @@ function AuthProvider({ children }) {
             }
         }
 
-        const unsubscribe = window.electronAPI.onAuthSuccess(initializeUserSession);
+        const unlistenPromise = listen("auth:send-token", initializeUserSession);
 
         return () => {
-            if(unsubscribe) unsubscribe();
+            unlistenPromise.then((unlisten) => unlisten());
         };
     }, []);
 
@@ -51,16 +55,16 @@ function AuthProvider({ children }) {
             setIsLoading(false);
         }
 
-        const unsubscribe = window.electronAPI.onAuthFailed(clearUserSession);
+        const unlistenPromise = listen("auth:failed", clearUserSession);
 
         return () => {
-            if(unsubscribe) unsubscribe();
+            unlistenPromise.then((unlisten) => unlisten());
         };
     }, []);
 
     function login() {
         setIsLoading(true);
-        window.electronAPI.openLoginModal();
+        invoke("open_auth_window");
     }
 
     function logout() {

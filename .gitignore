@@ -1,3 +1,8 @@
+# Ignored build outputs and compiled binaries
+src-tauri/target/
+
+src-tauri/gen/schemas/
+
 # Logs
 logs
 *.log
@@ -29,8 +34,10 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+# Frontend compilation build outputs
+dist/
+build/
+.astro/
 
 # Dependency directories
 node_modules/
@@ -59,6 +66,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.local
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -87,6 +95,3 @@ typings/
 
 # Vite
 .vite/
-
-# Electron-Forge
-out/

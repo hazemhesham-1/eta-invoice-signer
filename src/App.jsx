@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 import AuthProvider, { useAuth } from "@/contexts/AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -22,6 +25,44 @@ const AppContent = () => {
 };
 
 const App = () => {
+    useEffect(() => {
+        let isClosing = false;
+        let cancelled = false;
+
+        async function setup() {
+            const window = getCurrentWindow();
+
+            const unlisten = await window.on(async (event) => {
+                event.preventDefault();
+
+                if(isClosing) return;
+                isClosing = true;
+
+                try {
+                    await getCurrentWebview().clearAllBrowsingData();
+
+                    if(cancelled) return;
+
+                    await window.close();
+                }
+                catch(error) {
+                    console.error("Failed to clear browsing data: ", error);
+                    isClosing = false;
+                }
+            });
+
+            if(cancelled) {
+                unlisten();
+            }
+        };
+
+        setup();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
     return (
         <AuthProvider>
             <AppContent/>
