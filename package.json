@@ -1,7 +1,7 @@
 {
     "name": "iwomt-eta-invoice-signer",
     "productName": "IWOMT ETA Invoice Signer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Official IWOMT desktop companion application for secure signing and submission of invoices to the Egyptian Tax Authority (ETA) portal.",
     "private": true,
     "scripts": {

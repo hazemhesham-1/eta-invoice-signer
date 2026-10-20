@@ -1,11 +1,11 @@
 {
-    "version": "1.0.0",
-    "notes": "Welcome to the first official release of the ETA Electronic Invoice Signing and Submission Tool, developed by Eng. Hazem Hesham for IWOMT.",
-    "pub_date": "2026-09-29T12:00:00Z",
-    "platforms": {
-        "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNDF3RnYxa3I1NFhFZU5lVDNJWmVyQVN3eFZWTlFBem9TUUhncW9Ed3ZQdUlhblpiTitkMSsvK2pZMGlFaWZjTDdXOHN0WFg1aEE1VVhYVnhFWmNZSndFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNjg3NTgyCWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4wX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMApmZmZuS1IvbmhtTGdBM2l6bFJUUkxKS2huT1BwUUV2SnhjcGNYS3NXUWE0MW9mQUdCdnFEenppdHVCbEEyRjNZNG1GbHZ3a1AvUitIcWxlSnpaaTNEdz09Cg==",
-            "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.0/IWOMT ETA Invoice Signer_1.0.0_x64-setup.exe"
-        }
+  "notes": "Shifted the user authentication architecture from the JavaScript frontend to the Rust core layer (lib.rs). This resolves production CORS blocks entirely and secures data handling.",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNC94c2lST2NGalJDMG56aHNrUFdlZUtRK1dGaW1ZTTBneEUxT1NPa08rVk9uOHdLUDhMVUVIbkFLTTQwb1ljaHlXRGdZc0l0SjViVW5vVzUrWk9UOGdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNTAxMDQ0CWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4xX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMQpxV2NRWG9KeEowUHZKUW1sVTlnd3liWVlEZ1g3Wk9ha1BEdUFtODcrb2ViUHlCSkpvK3ByVlRSUkZkWkg3Rk4razgzVU4vVHNkdzdaMGZIVmwwdHJCZz09Cg==",
+      "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.1/IWOMT ETA Invoice Signer_1.0.1_x64-setup.exe"
     }
+  },
+  "pub_date": "2026-10-20T12:59:58Z",
+  "version": "1.0.1"
 }

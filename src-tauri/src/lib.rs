@@ -76,6 +76,7 @@ pub fn run() {
     })
     .invoke_handler(tauri::generate_handler![
         open_auth_window,
+        get_current_user,
         get_draft_invoices,
         get_certificates,
         sign_invoices,
@@ -99,7 +100,7 @@ async fn open_auth_window(app: AppHandle) -> Result<(), String> {
     let login_url = WebviewUrl::External("https://portal.iwomt.net/auth/employee/login?display=popup".parse().unwrap());
 
     let mut builder = WebviewWindowBuilder::new(&app, "auth", login_url).title("User Authentication");
-    builder = builder.inner_size(500.0, 340.0).resizable(false).parent(&main_window).map_err(|e| e.to_string())?;
+    builder = builder.inner_size(500.0, 340.0).resizable(false).center().parent(&main_window).map_err(|e| e.to_string())?;
 
     let succeeded = Arc::new(AtomicBool::new(false));
 
@@ -156,6 +157,27 @@ async fn open_auth_window(app: AppHandle) -> Result<(), String> {
     });
 
     Ok(())
+}
+
+#[tauri::command]
+async fn get_current_user(token: String) -> serde_json::Value {
+    let client = reqwest::Client::new();
+
+    let result = async {
+        let response = client.get("https://api.iwomt.net/api/user/me").bearer_auth(&token).send().await.map_err(|e| e.to_string())?;
+
+        if !response.status().is_success() {
+            return Err(format!("Failed to get current user: {}", response.status().as_u16()));
+        }
+
+        response.json::<serde_json::Value>().await.map_err(|e| e.to_string())
+    }
+    .await;
+
+    match result {
+        Ok(data) => data,
+        Err(message) => serde_json::json!({ "success": false, "error": message })
+    }
 }
 
 #[tauri::command]

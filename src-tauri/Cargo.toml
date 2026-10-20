@@ -1,6 +1,6 @@
 [package]
 name = "app"
-version = "1.0.0"
+version = "1.0.1"
 description = "Official IWOMT desktop companion application for secure signing and submission of invoices to the Egyptian Tax Authority (ETA) portal."
 authors = ["Hazem Hesham"]
 license = "UNLICENSED"

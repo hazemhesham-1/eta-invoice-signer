@@ -16,14 +16,7 @@ function AuthProvider({ children }) {
             try {
                 setToken(receivedToken);
 
-                const response = await fetch("https://api.iwomt.net/api/user/me", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${receivedToken}`
-                    }
-                });
-
-                const userData = await response.json();
+                const userData = await invoke("get_current_user", { token: receivedToken });
                 if(userData?.department.type === "FINANCE_DEPARTMENT") {
                     setUser({
                         name: `${userData.name.first.en} ${userData.name.last.en}`,
