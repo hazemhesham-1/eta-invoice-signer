@@ -1,6 +1,5 @@
 # Ignored build outputs and compiled binaries
 src-tauri/target/
-
 src-tauri/gen/schemas/
 
 # Logs

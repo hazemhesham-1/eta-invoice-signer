@@ -1,2 +1,0 @@
-D:\Projects\iwomt-eta-invoice-signer\src-csharp\SignerBridge\bin\Release\net8.0\win-x64\publish\SignerBridge.pdb
-D:\Projects\iwomt-eta-invoice-signer\src-csharp\SignerBridge\bin\Release\net8.0\win-x64\publish\SignerBridge.exe

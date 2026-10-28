@@ -1,0 +1,55 @@
+##   Core Build Outputs   ##
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Log]s/
+
+##   User-Specific Files & IDE Caches   ##
+*.suo
+*.user
+*.userprefs
+*.dbmdl
+*.jfm
+.vs/
+.idea/
+*.sln.docstates
+
+##   Visual Studio Code   ##
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+##   Package & Dependency Managers   ##
+packages/
+*.nupkg
+# Restore artifacts
+project.lock.json
+project.fragment.lock.json
+
+##   Testing & Code Coverage   ##
+TestResult.xml
+*.trx
+*.coverage
+*.coveragexml
+_Chutzpah*
+_NCrunch_*
+.nccrunch/
+BenchmarkDotNet.Artifacts/
+
+##   Publishing & Deployment   ##
+publish/
+*.pubxml
+*.azurePubxml
+AppPackages/
+BundleArtifacts/
+
+##   Operating System Detritus   ##
+Thumbs.db
+Desktop.ini
+.DS_Store
