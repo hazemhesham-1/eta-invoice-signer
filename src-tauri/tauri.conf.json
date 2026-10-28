@@ -1,7 +1,7 @@
 {
     "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
     "productName": "IWOMT ETA Invoice Signer",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "identifier": "com.iwomt.eta-invoice-signer",
     "build": {
         "frontendDist": "../dist",
@@ -34,7 +34,8 @@
         "longDescription": "A desktop application designed for the Egyptian Tax Authority (ETA) e-invoicing ecosystem. Developed by Eng. Hazem Hesham for IWOMT, This tool helps companies stay compliant by allowing them to securely sign invoices using USB tokens or HSM hardware, verify document structures locally, and submit data directly to the official ETA portal.",
         "android": {
             "debugApplicationIdSuffix": ".debug"
-        }
+        },
+        "externalBin": ["binaries/signer-service"]
     },
     "plugins": {
         "updater": {

@@ -1,11 +1,11 @@
 {
-  "notes": "Shifted the user authentication architecture from the JavaScript frontend to the Rust core layer (lib.rs). This resolves production CORS blocks entirely and secures data handling.",
-  "platforms": {
-    "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNC94c2lST2NGalJDMG56aHNrUFdlZUtRK1dGaW1ZTTBneEUxT1NPa08rVk9uOHdLUDhMVUVIbkFLTTQwb1ljaHlXRGdZc0l0SjViVW5vVzUrWk9UOGdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNTAxMDQ0CWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4xX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMQpxV2NRWG9KeEowUHZKUW1sVTlnd3liWVlEZ1g3Wk9ha1BEdUFtODcrb2ViUHlCSkpvK3ByVlRSUkZkWkg3Rk4razgzVU4vVHNkdzdaMGZIVmwwdHJCZz09Cg==",
-      "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.1/IWOMT ETA Invoice Signer_1.0.1_x64-setup.exe"
-    }
-  },
-  "pub_date": "2026-10-20T12:59:58Z",
-  "version": "1.0.1"
+    "notes": "Finance Update: Added a checkbox to automatically submit invoices immediately after signing for testing.",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNHd3ck9aN3hnZmx5ZmlvM3Fyc0ppRUp3aC9WcFRpRkhLNUR3UFVOL1BLWFA3ZzdiREVJVUEzZllPamJiUXUvc0liN1dYMFBLZlJPL1Y5WWFNQnJuVndvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNTYxODUyCWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4yX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMgptWjlLcjNjYjhlS2Y5QjVEZkVQc1ZucVdjUWV1Tm9VRy9NZDJuYndBaXYwQ1BONStWaFVrL0V5NE5tSU0wWEtGRFYxWUcvOFM0TEx5SEZ1NnBsOVJEdz09Cg==",
+            "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.2/IWOMT ETA Invoice Signer_1.0.2_x64-setup.exe"
+        }
+    },
+    "pub_date": "2026-10-21T05:52:56Z",
+    "version": "1.0.2"
 }

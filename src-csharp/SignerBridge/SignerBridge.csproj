@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="Pkcs11Interop" Version="5.1.1"/>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="5.0.0"/>
+  </ItemGroup>
+  <Target Name="PublishBinaries" AfterTargets="Publish">
+    <PropertyGroup>
+      <TargetFileName>signer-service-x86_64-pc-windows-msvc</TargetFileName>
+      <DropPath>$(MSBuildProjectDirectory)\..\..\src-tauri\binaries</DropPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <SourceFiles Include="bin\Release\net8.0\win-x64\publish\$(TargetName).exe"/>
+      <DestinationFiles Include="$(DropPath)/$(TargetFileName).exe"/>
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(SourceFiles)"
+      DestinationFiles="@(DestinationFiles)"
+      SkipUnchangedFiles="true"
+    />
+  </Target>
+</Project>

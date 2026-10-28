@@ -1,7 +1,7 @@
 {
     "name": "iwomt-eta-invoice-signer",
     "productName": "IWOMT ETA Invoice Signer",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Official IWOMT desktop companion application for secure signing and submission of invoices to the Egyptian Tax Authority (ETA) portal.",
     "private": true,
     "scripts": {
@@ -33,6 +33,8 @@
         "@electron/fuses": "^1.8.0",
         "@tailwindcss/vite": "^4.3.3",
         "@tauri-apps/cli": "^2.12.0",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
         "electron": "43.3.0",
         "prettier": "^3.9.6",
         "prettier-plugin-tailwindcss": "^0.8.1",
@@ -50,6 +52,7 @@
         "@vitejs/plugin-react": "^6.0.5",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "cn": "^0.5.0",
         "dotenv": "^17.4.2",
         "electron-squirrel-startup": "^1.0.1",
         "lucide-react": "^1.31.0",
