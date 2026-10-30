@@ -7,7 +7,7 @@ import { Badge } from "./ui/Badge";
 import { Button } from "./ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/Select";
-import TokenHardwareAlert from "./TokenHardwareAlert";
+import HardwareTokenAlert from "./HardwareTokenAlert";
 
 interface CertificateCardProps {
     certificate: Certificate | null;
@@ -72,7 +72,7 @@ const CertificateCard = ({ certificate, onSelectCertificate, useOfficialSigner =
 
     return (
         <div className="space-y-2">
-            {!isTokenConnected && <TokenHardwareAlert/>}
+            {!isTokenConnected && <HardwareTokenAlert/>}
             <Card>
                 <CardHeader>
                     <div className="flex items-start justify-between">

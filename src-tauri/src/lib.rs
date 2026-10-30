@@ -25,6 +25,23 @@ const MODULE_LIB_PATH: &str = r"C:\Windows\System32\eps2003csp11.dll";
 #[cfg(not(target_os = "windows"))]
 const MODULE_LIB_PATH: &str = "/usr/local/lib/softhsm/libsofthsm2.so";
 
+#[tauri::command]
+fn open_soft_keyboard() -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    {
+        Command::new("cmd").args(["/C", "start", "osk.exe"]).spawn().map(|_| ()).map_err(|e| e.to_string())
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        Command::new("onboard").spawn().map(|_| ()).map_err(|e| e.to_string())
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        Command::new("osascript").args(["-e", "tell application \"System Events\" to set visible of process \"Accessibility Keyboard\" to true"]).spawn().map(|_| ()).map_err(|e| e.to_string())
+    }
+}
 
 fn launch_sign_client() {
     const SIGN_CLIENT_APP_PATH: &str = r"C:\ProgramData\ESCC\ItidaSignClient.exe";
@@ -87,7 +104,8 @@ pub fn run() {
         commands::crypto::sign_invoices_native,
         commands::invoices::get_draft_invoices,
         commands::invoices::save_invoice_signature,
-        commands::invoices::submit_invoices
+        commands::invoices::submit_invoices,
+        open_soft_keyboard
     ])
     .run(tauri::generate_context!())
     .expect("error while building tauri application");

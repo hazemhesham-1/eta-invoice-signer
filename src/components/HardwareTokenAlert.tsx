@@ -1,7 +1,7 @@
 import { CircleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/Alert";
 
-const TokenHardwareAlert = () => {
+const HardwareTokenAlert = () => {
     return (
         <Alert variant="destructive">
             <CircleAlertIcon className="size-4"/>
@@ -12,4 +12,4 @@ const TokenHardwareAlert = () => {
     );
 };
 
-export default TokenHardwareAlert;
+export default HardwareTokenAlert;

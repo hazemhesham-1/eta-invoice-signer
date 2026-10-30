@@ -1,15 +1,22 @@
 use std::sync::Mutex;
 use cryptoki::context::Pkcs11;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
 use tauri_plugin_shell::{process::CommandEvent, ShellExt};
 
 pub struct Pkcs11State(pub Mutex<Pkcs11>);
 
+#[derive(Deserialize, Serialize)]
+pub struct SignatureData {
+    #[serde(rename = "signatureType")]
+    signature_type: String,
+    value: String,
+}
+
 #[derive(Deserialize)]
 struct SignResponse {
     success: bool,
-    signature: Option<String>,
+    signature: Option<SignatureData>,
     error: Option<String>,
 }
 
@@ -47,6 +54,7 @@ pub fn get_usb_token(state: tauri::State<Pkcs11State>) -> serde_json::Value {
 #[tauri::command]
 pub async fn sign_invoices_native(app: AppHandle, data: serde_json::Value) -> Result<serde_json::Value, String> {
     use serde_json::{json, Value};
+    use base64::{engine::general_purpose::STANDARD, Engine as _};
 
     let documents = data
         .get("documents")
@@ -59,11 +67,20 @@ pub async fn sign_invoices_native(app: AppHandle, data: serde_json::Value) -> Re
         .filter(|c| !c.is_empty())
         .ok_or_else(|| { "Failed to proceed. The digital signing certificate ID is missing.".to_string() })?;
 
+    let token_pin = data
+        .get("tokenPin")
+        .and_then(|c| c.as_str())
+        .filter(|c| !c.is_empty())
+        .ok_or_else(|| { "Failed to proceed. The hardware token pin is missing.".to_string() })?;
+
+    let serialized_bytes = serde_json::to_vec(&documents).expect("Failed to serialize documents");
+
     // Send the request to the bundled sidecar.
     let request = json!({
         "action": "sign",
         "thumbprint": thumbprint,
-        "document": documents
+        "document": STANDARD.encode(&serialized_bytes),
+        "tokenPin": token_pin
     });
 
     let mut child = app
@@ -104,13 +121,13 @@ pub async fn sign_invoices_native(app: AppHandle, data: serde_json::Value) -> Re
         return Ok(json!({
             "success": false,
             "data": Value::Null,
-            "error": response.error.unwrap_or_else(|| "Native Signing service failed".into()),
+            "error": response.error.unwrap_or_else(|| "Native Signing service failed".into())
         }));
     }
 
     Ok(json!({
         "success": true,
-        "data": response.signature,
+        "data": serde_json::to_value(&response.signature).unwrap_or(Value::Null),
         "error": Value::Null
     }))
 }

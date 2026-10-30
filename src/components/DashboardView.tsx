@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { FileSignatureIcon, RefreshCwIcon } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { RefreshCwIcon } from "lucide-react";
+import { ApiResponse, Certificate, Invoice, InvoiceResponse, InvoiceStatus } from "@/lib/types";
 import { base64ToUtf8, isBase64 } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTauriListener } from "@/hooks/useTauriListener";
 import { Badge } from "./ui/Badge";
 import { Button } from "./ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
@@ -14,7 +17,7 @@ import CertificateCard from "./CertificateCard";
 import InvoiceTable from "./InvoiceTable";
 import SigningProgress from "./SigningProgress";
 import UserProfileHeader from "./UserProfileHeader";
-import { ApiResponse, Certificate, Invoice, InvoiceResponse, InvoiceStatus } from "@/lib/types";
+import SignInvoiceButton from "./SignInvoiceButton";
 
 const DashboardView = () => {
     const { token } = useAuth();
@@ -56,8 +59,8 @@ const DashboardView = () => {
         setInvoices((current) => current.map((invoice) => (invoice.id === id ? { ...invoice, status } : invoice)));
     }
 
-    async function handleSignInvoices() {
-        if(!selectedCert) return;
+    async function handleSignInvoices(tokenPin?: string) {
+        if(!selectedCert || (!useOfficialSigner && tokenPin?.trim() === "")) return;
 
         setIsSigning(true);
 
@@ -77,10 +80,11 @@ const DashboardView = () => {
                 const { id, status, signatures, ...invoiceDocument } = foundInvoice;
                 const data = {
                     documents: [JSON.stringify(invoiceDocument)],
-                    certificateId: selectedCert.id
+                    certificateId: selectedCert.id,
+                    tokenPin
                 };
                 
-                const result: ApiResponse = await invoke(useOfficialSigner ? "sign_invoices_itida" : "sign_invoices_native", { data });
+                const result: ApiResponse<{ value: string }> = await invoke(useOfficialSigner ? "sign_invoices_itida" : "sign_invoices_native", { data });
                 console.log(result);
 
                 let statusUpdate: InvoiceStatus = result.success ? "SIGNED" : "FAILED";
@@ -88,7 +92,7 @@ const DashboardView = () => {
                 if(result.success) {
                     const signature = {
                         type: "I",
-                        value: result.data
+                        value: typeof result.data === "string" ? result.data : result.data.value
                     };
 
                     const saveResult: ApiResponse = await invoke("save_invoice_signature", { token, invoiceId, signatureData: [signature] });
@@ -100,7 +104,7 @@ const DashboardView = () => {
                     }
                 }
                 else {
-                    alert(result.error && isBase64(result.error) ? base64ToUtf8(result.error) : result.error);
+                    alert(result.error && isBase64(`${result.error}=`) ? base64ToUtf8(result.error) : result.error);
                 }
 
                 updateInvoiceStatus(invoiceId, statusUpdate);
@@ -146,6 +150,12 @@ const DashboardView = () => {
     useEffect(() => {
         loadInvoices();
     }, []);
+
+    useTauriListener<{ value: string }>("token-pin-submitted", async (event) => {
+        const pinInputWindow = WebviewWindow.getByLabel("usb-token-auth");
+        await pinInputWindow.then((res) => res?.close());
+        await handleSignInvoices(event.payload.value);
+    });
 
     return (
         <main
@@ -248,16 +258,15 @@ const DashboardView = () => {
                                 <RefreshCwIcon className="size-4 me-2"/>
                                 تحديث
                             </Button>
-                            {(selected.length > 0) && (
-                                <Button
-                                    size="lg"
-                                    disabled={isSigning || !selectedCert}
-                                    onClick={handleSignInvoices}
+                            {selectedCert && (selected.length > 0) && (
+                                <SignInvoiceButton
+                                    isSigning={isSigning}
+                                    totalSelected={selected.length}
+                                    disabled={isSigning}
                                     className="text-sm"
-                                >
-                                    <FileSignatureIcon className="size-4 me-2"/>
-                                    {isSigning ? "جاري التوقيع..." : `توقيع ${(selected.length !== 1) ? `${selected.length} فواتير` : "فاتورة واحدة"}`}
-                                </Button>
+                                    showPromptWindow={!useOfficialSigner}
+                                    onSignClick={() => useOfficialSigner ? handleSignInvoices() : undefined}
+                                />
                             )}
                         </div>
                     </>

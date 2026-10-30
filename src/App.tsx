@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import AuthProvider, { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +8,7 @@ import FullPageSpinner from "./components/FullPageSpinner";
 import AccessDeniedBanner from "./components/AccessDeniedBanner";
 import LoginView from "@/components/LoginView";
 import DashboardView from "./components/DashboardView";
+import HardwareTokenPinInput from "./components/HardwareTokenPinInput";
 
 const AppContent = () => {
     const { token, user, isLoading } = useAuth();
@@ -25,6 +26,15 @@ const AppContent = () => {
 };
 
 const App = () => {
+    const [route, setRoute] = useState(window.location.hash);
+
+    useEffect(() => {
+        const handleHashChange = () => setRoute(window.location.hash);
+
+        window.addEventListener("hashchange", handleHashChange);
+        return () => window.removeEventListener("hashchange", handleHashChange);
+    }, []);
+
     useEffect(() => {
         let isClosing = false;
         let cancelled = false;
@@ -65,7 +75,7 @@ const App = () => {
 
     return (
         <AuthProvider>
-            <AppContent/>
+            {route.includes("#/auth/usb-token") ? <HardwareTokenPinInput/> : <AppContent/>}
         </AuthProvider>
     );
 };

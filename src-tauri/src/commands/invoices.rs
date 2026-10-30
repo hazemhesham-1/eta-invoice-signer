@@ -24,7 +24,7 @@ pub async fn save_invoice_signature(token: String, invoice_id: String, signature
     let client = reqwest::Client::new();
 
     let result = async {
-        let response = client.patch(format!("https://api.iwomt.net/api/finance/invoices/{invoice_id}")).bearer_auth(&token).json(&signature_data).send().await.map_err(|e| e.to_string())?;
+        let response = client.put(format!("https://api.iwomt.net/api/finance/invoices/{invoice_id}/signature")).bearer_auth(&token).json(&signature_data).send().await.map_err(|e| e.to_string())?;
 
         if !response.status().is_success() {
             return Err(format!("Failed to attach signature to invoice: {}", response.status().as_u16()));
