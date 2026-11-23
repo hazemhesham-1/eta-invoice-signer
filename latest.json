@@ -1,11 +1,11 @@
 {
-    "notes": "Finance Update: Added a checkbox to automatically submit invoices immediately after signing for testing.",
-    "platforms": {
-        "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNHd3ck9aN3hnZmx5ZmlvM3Fyc0ppRUp3aC9WcFRpRkhLNUR3UFVOL1BLWFA3ZzdiREVJVUEzZllPamJiUXUvc0liN1dYMFBLZlJPL1Y5WWFNQnJuVndvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkyNTYxODUyCWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC4yX3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuMgptWjlLcjNjYjhlS2Y5QjVEZkVQc1ZucVdjUWV1Tm9VRy9NZDJuYndBaXYwQ1BONStWaFVrL0V5NE5tSU0wWEtGRFYxWUcvOFM0TEx5SEZ1NnBsOVJEdz09Cg==",
-            "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.2/IWOMT ETA Invoice Signer_1.0.2_x64-setup.exe"
-        }
-    },
-    "pub_date": "2026-10-21T05:52:56Z",
-    "version": "1.0.2"
+  "notes": "Fixed digital signature attachment and document payload formatting during ETA e-invoice submission.",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNDhJTkVzcXdGWERuZE5Za0NHQzM4RVErSnV4NTM0Z2dFVEJHR0VQSVNsY0FuMUdCZHA0eStQOW1UQnNweXRnd1c3MFpKR1JNS3p2RTBlN3VPekQzd0FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NDQyNjg0CWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC40X3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuNApDMCtwT3Yxa1lhODI3QzYreGpZVC9pQmdkTGZ2NU5od0h4eE9EcEIzS3V6V0xZdlVTL2ZWc3BHdmFPSG91RUEwdnJlWVhiVjl4MDgwYzIzaUU5VFZCdz09Cg==",
+      "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.4/IWOMT ETA Invoice Signer_1.0.4_x64-setup.exe"
+    }
+  },
+  "pub_date": "2026-11-23T14:05:52Z",
+  "version": "1.0.4"
 }

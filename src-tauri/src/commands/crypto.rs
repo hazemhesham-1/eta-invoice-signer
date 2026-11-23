@@ -1,22 +1,15 @@
 use std::sync::Mutex;
 use cryptoki::context::Pkcs11;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 use tauri::AppHandle;
 use tauri_plugin_shell::{process::CommandEvent, ShellExt};
 
 pub struct Pkcs11State(pub Mutex<Pkcs11>);
 
-#[derive(Deserialize, Serialize)]
-pub struct SignatureData {
-    #[serde(rename = "signatureType")]
-    signature_type: String,
-    value: String,
-}
-
 #[derive(Deserialize)]
 struct SignResponse {
     success: bool,
-    signature: Option<SignatureData>,
+    data: Option<String>,
     error: Option<String>,
 }
 
@@ -127,7 +120,7 @@ pub async fn sign_invoices_native(app: AppHandle, data: serde_json::Value) -> Re
 
     Ok(json!({
         "success": true,
-        "data": serde_json::to_value(&response.signature).unwrap_or(Value::Null),
+        "data": serde_json::to_value(&response.data).unwrap_or(Value::Null),
         "error": Value::Null
     }))
 }

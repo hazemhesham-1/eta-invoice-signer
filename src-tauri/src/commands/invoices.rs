@@ -20,11 +20,11 @@ pub async fn get_draft_invoices(token: String) -> serde_json::Value {
 }
 
 #[tauri::command]
-pub async fn save_invoice_signature(token: String, invoice_id: String, signature_data: serde_json::Value) -> serde_json::Value {
+pub async fn save_invoice_signature(token: String, invoice_id: String, document: String) -> serde_json::Value {
     let client = reqwest::Client::new();
 
     let result = async {
-        let response = client.put(format!("https://api.iwomt.net/api/finance/invoices/{invoice_id}/signature")).bearer_auth(&token).json(&signature_data).send().await.map_err(|e| e.to_string())?;
+        let response = client.put(format!("https://api.iwomt.net/api/finance/invoices/{invoice_id}/signature")).bearer_auth(&token).json(&document).send().await.map_err(|e| e.to_string())?;
 
         if !response.status().is_success() {
             return Err(format!("Failed to attach signature to invoice: {}", response.status().as_u16()));

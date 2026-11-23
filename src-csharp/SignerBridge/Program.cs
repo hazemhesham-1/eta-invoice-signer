@@ -40,8 +40,8 @@ public sealed class SignRequest
 
 public class TokenSigner
 {
-    private readonly string DllLibPath = @"D:\Program Files\SoftHSM2\lib\softhsm2-x64.dll";
-    // private readonly string DllLibPath = @"C:\Windows\System32\eps2003csp11.dll";
+    // private readonly string DllLibPath = @"D:\Program Files\SoftHSM2\lib\softhsm2-x64.dll";
+    private readonly string DllLibPath = @"C:\Windows\System32\eps2003csp11.dll";
     private string Document = "";
     private string TokenCertificate = "CERTIFICATE_THUMBPRINT";
     private string TokenPin = "";
@@ -115,9 +115,14 @@ public class TokenSigner
 
             byte[] documentBytes = Convert.FromBase64String(tokenSigner.Document);
             string sourceDocument = Encoding.UTF8.GetString(documentBytes);
-            JObject signature = tokenSigner.processJSON(sourceDocument);
+            JObject result = tokenSigner.processJSON(sourceDocument);
 
-            Console.WriteLine(JsonConvert.SerializeObject(new { success = true, signature }));
+            string signedJson = result.ToString(Formatting.None);
+            string base64EncodedSignedJson = Convert.ToBase64String(Encoding.UTF8.GetBytes(signedJson));
+
+            var output = new { success = true, data = base64EncodedSignedJson };
+
+            Console.WriteLine(JsonConvert.SerializeObject(output, Formatting.None));
         }
         catch(Exception e)
         {
@@ -150,8 +155,10 @@ public class TokenSigner
             cades = tokenSigner.SignWithCMS(canonicalString);
         }
 
-        JObject signatureObject = JObject.FromObject(new { signatureType = "I", value = cades });
-        return signatureObject;
+        JObject signatureObject = new JObject( new JProperty("signatureType", "I"), new JProperty("value", cades));
+        request.Add("signatures", new JArray { signatureObject });
+
+        return request;
     }
     
     private static byte[] Hash(string input)

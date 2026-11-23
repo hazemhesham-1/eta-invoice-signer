@@ -23,7 +23,7 @@ const DashboardView = () => {
     const { token } = useAuth();
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
-    const [useOfficialSigner, setUseOfficialSigner] = useState(true);
+    const [useOfficialSigner, setUseOfficialSigner] = useState(false);
     const [isSubmissionChecked, setIsSubmissionChecked] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -84,18 +84,19 @@ const DashboardView = () => {
                     tokenPin
                 };
                 
-                const result: ApiResponse<{ value: string }> = await invoke(useOfficialSigner ? "sign_invoices_itida" : "sign_invoices_native", { data });
-                console.log(result);
+                const result: ApiResponse = await invoke(useOfficialSigner ? "sign_invoices_itida" : "sign_invoices_native", { data });
+                console.log(result)
 
                 let statusUpdate: InvoiceStatus = result.success ? "SIGNED" : "FAILED";
 
                 if(result.success) {
-                    const signature = {
-                        type: "I",
-                        value: typeof result.data === "string" ? result.data : result.data.value
+                    const payload = {
+                        token,
+                        invoiceId,
+                        document: result.data
                     };
 
-                    const saveResult: ApiResponse = await invoke("save_invoice_signature", { token, invoiceId, signatureData: [signature] });
+                    const saveResult: ApiResponse = await invoke("save_invoice_signature", payload);
                     if(!saveResult.success) {
                         statusUpdate = "FAILED";
                     }
