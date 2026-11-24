@@ -1,11 +1,11 @@
 {
-  "notes": "Fixed digital signature attachment and document payload formatting during ETA e-invoice submission.",
-  "platforms": {
-    "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNDhJTkVzcXdGWERuZE5Za0NHQzM4RVErSnV4NTM0Z2dFVEJHR0VQSVNsY0FuMUdCZHA0eStQOW1UQnNweXRnd1c3MFpKR1JNS3p2RTBlN3VPekQzd0FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NDQyNjg0CWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC40X3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuNApDMCtwT3Yxa1lhODI3QzYreGpZVC9pQmdkTGZ2NU5od0h4eE9EcEIzS3V6V0xZdlVTL2ZWc3BHdmFPSG91RUEwdnJlWVhiVjl4MDgwYzIzaUU5VFZCdz09Cg==",
-      "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.4/IWOMT ETA Invoice Signer_1.0.4_x64-setup.exe"
-    }
-  },
-  "pub_date": "2026-11-23T14:05:52Z",
-  "version": "1.0.4"
+    "notes": "Bug Fix: Resolved an issue where the signed Base64 invoice was sent as a raw string instead of a valid JSON object, preventing server parsing errors during invoice signature updates.",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSbnREQUdKZjJjNDNyRFZINitxOWVVbnBTZ3FDc2hmNm93aENjS0RZcUN5Wk8rRE9iYUhKN1FGazBYNmkyWVhZMnFaZjdtVE13Qjh4QStpM3UwSElCWnhlTUNzNXNlQ3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NTYxMTkwCWZpbGU6SVdPTVQgRVRBIEludm9pY2UgU2lnbmVyXzEuMC42X3g2NC1zZXR1cC5leGUJdmVyc2lvbjoxLjAuNgpaZ0p1QjhtbmxQelNMQ2ZGb3NrSUYrZzFlVXcvWHJZS2xXUXNXMkNpN01aQ0FLaE9GUVVsMlY3SGE4VTN6MTY2STBYVHQxbE9NWTZ1RGJxZXNUNGRBQT09Cg==",
+            "url": "https://updates.iwomt.net/eta-invoice-signer/updates/1.0.6/IWOMT ETA Invoice Signer_1.0.6_x64-setup.exe"
+        }
+    },
+    "pub_date": "2026-11-24T23:04:02Z",
+    "version": "1.0.6"
 }

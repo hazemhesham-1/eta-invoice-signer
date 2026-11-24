@@ -1,3 +1,4 @@
+pub mod constants;
 mod commands;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

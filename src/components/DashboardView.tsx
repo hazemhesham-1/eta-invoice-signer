@@ -83,9 +83,8 @@ const DashboardView = () => {
                     certificateId: selectedCert.id,
                     tokenPin
                 };
-                
+
                 const result: ApiResponse = await invoke(useOfficialSigner ? "sign_invoices_itida" : "sign_invoices_native", { data });
-                console.log(result)
 
                 let statusUpdate: InvoiceStatus = result.success ? "SIGNED" : "FAILED";
 

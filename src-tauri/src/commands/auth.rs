@@ -2,12 +2,14 @@ use tauri::{AppHandle, Manager, Emitter, WebviewUrl, WebviewWindowBuilder, Windo
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
+use crate::constants::{API_URL, MAIN_ERP_PORTAL_URL};
+
 #[tauri::command]
 pub async fn get_current_user(token: String) -> serde_json::Value {
     let client = reqwest::Client::new();
 
     let result = async {
-        let response = client.get("https://api.iwomt.net/api/user/me").bearer_auth(&token).send().await.map_err(|e| e.to_string())?;
+        let response = client.get(format!("{}/api/user/me", API_URL)).bearer_auth(&token).send().await.map_err(|e| e.to_string())?;
 
         if !response.status().is_success() {
             return Err(format!("Failed to get current user: {}", response.status().as_u16()));
@@ -32,7 +34,7 @@ pub async fn open_auth_window(app: AppHandle) -> Result<(), String> {
 
     let main_window = app.get_webview_window("main").ok_or_else(|| "Main window not found".to_string())?;
 
-    let login_url = WebviewUrl::External("https://portal.iwomt.net/auth/employee/login?display=popup".parse().unwrap());
+    let login_url = WebviewUrl::External(format!("{}/auth/employee/login?display=popup", MAIN_ERP_PORTAL_URL).parse().unwrap());
 
     let mut builder = WebviewWindowBuilder::new(&app, "auth", login_url).title("User Authentication");
     builder = builder.inner_size(500.0, 340.0).resizable(false).center().parent(&main_window).map_err(|e| e.to_string())?;
@@ -55,7 +57,7 @@ pub async fn open_auth_window(app: AppHandle) -> Result<(), String> {
                         let jwt_value = cookie.value().to_string();
 
                         let client = reqwest::Client::new();
-                        let res = client.get("https://api.iwomt.net/auth/refresh").header(reqwest::header::COOKIE, format!("jwt={jwt_value}")).send().await;
+                        let res = client.get(format!("{}/auth/refresh", API_URL)).header(reqwest::header::COOKIE, format!("jwt={jwt_value}")).send().await;
 
                         if let Ok(response) = res {
                             if let Ok(data) = response.json::<serde_json::Value>().await {
